@@ -47,7 +47,7 @@ ahs_design <-
 				"5 up to 10 acres" , "10 acres or more" ) ) ,
 				
 				
-		condominium = as.numeric( condo == 1 )
+		below_poverty = as.numeric( perpovlvl < 100 )
 				
 	)
 sum( weights( ahs_design , "sampling" ) != 0 )
@@ -113,16 +113,16 @@ svymean( ~ totrooms , ahs_design , deff = TRUE )
 
 # SRS with replacement
 svymean( ~ totrooms , ahs_design , deff = "replace" )
-svyciprop( ~ condominium , ahs_design ,
-	method = "likelihood" )
-svyttest( totrooms ~ condominium , ahs_design )
+svyciprop( ~ below_poverty , ahs_design ,
+	method = "likelihood" , na.rm = TRUE )
+svyttest( totrooms ~ below_poverty , ahs_design )
 svychisq( 
-	~ condominium + lotsize , 
+	~ below_poverty + lotsize , 
 	ahs_design 
 )
 glm_result <- 
 	svyglm( 
-		totrooms ~ condominium + lotsize , 
+		totrooms ~ below_poverty + lotsize , 
 		ahs_design 
 	)
 
