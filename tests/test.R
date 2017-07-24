@@ -28,51 +28,61 @@ ahs_design <-
 ahs_design <- 
 	update( 
 		ahs_design , 
-		q2 = q2 ,
-		never_rarely_wore_bike_helmet = as.numeric( qn8 == 1 ) ,
-		ever_smoked_marijuana = as.numeric( qn47 == 1 ) ,
-		ever_tried_to_quit_cigarettes = as.numeric( q36 > 2 ) ,
-		smoked_cigarettes_past_year = as.numeric( q36 > 1 )
+
+		occupant = 
+			ifelse( tenure == 1 , "owner" , 
+			ifelse( tenure %in% 2:3 , "renter" , 
+				"not occupied" ) ) ,
+				
+		lotsize =
+			factor( lotsize , levels = 1:7 ,
+				labels = c( "Less then 1/8 acre" , 
+				"1/8 up to 1/4 acre" , "1/4 up to 1/2 acre" ,
+				"1/2 up to 1 acre" , "1 up to 5 acres" , 
+				"5 up to 10 acres" , "10 acres or more" ) ) ,
+				
+				
+		condominium = as.numeric( condo == 1 )
+				
 	)
 sum( weights( ahs_design , "sampling" ) != 0 )
 
-svyby( ~ one , ~ ever_smoked_marijuana , ahs_design , unwtd.count )
+svyby( ~ one , ~ occupant , ahs_design , unwtd.count )
 svytotal( ~ one , ahs_design )
 
-svyby( ~ one , ~ ever_smoked_marijuana , ahs_design , svytotal )
-svymean( ~ bmipct , ahs_design , na.rm = TRUE )
+svyby( ~ one , ~ occupant , ahs_design , svytotal )
+svymean( ~ totrooms , ahs_design )
 
-svyby( ~ bmipct , ~ ever_smoked_marijuana , ahs_design , svymean , na.rm = TRUE )
-svymean( ~ q2 , ahs_design , na.rm = TRUE )
+svyby( ~ totrooms , ~ occupant , ahs_design , svymean )
+svymean( ~ lotsize , ahs_design , na.rm = TRUE )
 
-svyby( ~ q2 , ~ ever_smoked_marijuana , ahs_design , svymean , na.rm = TRUE )
-svytotal( ~ bmipct , ahs_design , na.rm = TRUE )
+svyby( ~ lotsize , ~ occupant , ahs_design , svymean , na.rm = TRUE )
+svytotal( ~ totrooms , ahs_design )
 
-svyby( ~ bmipct , ~ ever_smoked_marijuana , ahs_design , svytotal , na.rm = TRUE )
-svytotal( ~ q2 , ahs_design , na.rm = TRUE )
+svyby( ~ totrooms , ~ occupant , ahs_design , svytotal )
+svytotal( ~ lotsize , ahs_design , na.rm = TRUE )
 
-svyby( ~ q2 , ~ ever_smoked_marijuana , ahs_design , svytotal , na.rm = TRUE )
-svyquantile( ~ bmipct , ahs_design , 0.5 , na.rm = TRUE )
+svyby( ~ lotsize , ~ occupant , ahs_design , svytotal , na.rm = TRUE )
+svyquantile( ~ totrooms , ahs_design , 0.5 )
 
 svyby( 
-	~ bmipct , 
-	~ ever_smoked_marijuana , 
+	~ totrooms , 
+	~ occupant , 
 	ahs_design , 
 	svyquantile , 
 	0.5 ,
 	ci = TRUE ,
-	keep.var = TRUE ,
-	na.rm = TRUE
+	keep.var = TRUE 
 )
 svyratio( 
-	numerator = ~ ever_tried_to_quit_cigarettes , 
-	denominator = ~ smoked_cigarettes_past_year , 
+	numerator = ~ totrooms , 
+	denominator = ~ rent , 
 	ahs_design ,
 	na.rm = TRUE
 )
-sub_ahs_design <- subset( ahs_design , qn41 == 1 )
-svymean( ~ bmipct , sub_ahs_design , na.rm = TRUE )
-this_result <- svymean( ~ bmipct , ahs_design , na.rm = TRUE )
+sub_ahs_design <- subset( ahs_design , garage == 1 )
+svymean( ~ totrooms , sub_ahs_design )
+this_result <- svymean( ~ totrooms , ahs_design )
 
 coef( this_result )
 SE( this_result )
@@ -81,11 +91,10 @@ cv( this_result )
 
 grouped_result <-
 	svyby( 
-		~ bmipct , 
-		~ ever_smoked_marijuana , 
+		~ totrooms , 
+		~ occupant , 
 		ahs_design , 
-		svymean ,
-		na.rm = TRUE 
+		svymean 
 	)
 	
 coef( grouped_result )
@@ -93,22 +102,22 @@ SE( grouped_result )
 confint( grouped_result )
 cv( grouped_result )
 degf( ahs_design )
-svyvar( ~ bmipct , ahs_design , na.rm = TRUE )
+svyvar( ~ totrooms , ahs_design )
 # SRS without replacement
-svymean( ~ bmipct , ahs_design , na.rm = TRUE , deff = TRUE )
+svymean( ~ totrooms , ahs_design , deff = TRUE )
 
 # SRS with replacement
-svymean( ~ bmipct , ahs_design , na.rm = TRUE , deff = "replace" )
-svyciprop( ~ never_rarely_wore_bike_helmet , ahs_design ,
-	method = "likelihood" , na.rm = TRUE )
-svyttest( bmipct ~ never_rarely_wore_bike_helmet , ahs_design )
+svymean( ~ totrooms , ahs_design , deff = "replace" )
+svyciprop( ~ condominium , ahs_design ,
+	method = "likelihood" )
+svyttest( totrooms ~ condominium , ahs_design )
 svychisq( 
-	~ never_rarely_wore_bike_helmet + q2 , 
+	~ condominium + lotsize , 
 	ahs_design 
 )
 glm_result <- 
 	svyglm( 
-		bmipct ~ never_rarely_wore_bike_helmet + q2 , 
+		totrooms ~ condominium + lotsize , 
 		ahs_design 
 	)
 
@@ -116,17 +125,9 @@ summary( glm_result )
 library(srvyr)
 ahs_srvyr_design <- as_survey( ahs_design )
 ahs_srvyr_design %>%
-	summarize( mean = survey_mean( bmipct , na.rm = TRUE ) )
+	summarize( mean = survey_mean( totrooms ) )
 
 ahs_srvyr_design %>%
-	group_by( ever_smoked_marijuana ) %>%
-	summarize( mean = survey_mean( bmipct , na.rm = TRUE ) )
-
-unwtd.count( ~ never_rarely_wore_bike_helmet , yrbss_design )
-
-svytotal( ~ one , subset( yrbss_design , !is.na( never_rarely_wore_bike_helmet ) ) )
- 
-svymean( ~ never_rarely_wore_bike_helmet , yrbss_design , na.rm = TRUE )
-
-svyciprop( ~ never_rarely_wore_bike_helmet , yrbss_design , na.rm = TRUE , method = "beta" )
+	group_by( occupant ) %>%
+	summarize( mean = survey_mean( totrooms ) )
 
