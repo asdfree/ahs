@@ -15,7 +15,12 @@ options( survey.replicates.mse = TRUE )
 
 library(survey)
 
-ahs_df <- readRDS( file.path( getwd() , "2015/national_v1.2/household.rds" ) )
+ahs_df <- 
+	readRDS( 
+		file.path( getwd() , 
+			"2015/national_v1.2/household.rds" 
+		) 
+	)
 
 ahs_design <- 
 	svrepdesign(
