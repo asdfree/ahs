@@ -11,17 +11,19 @@ ahs_cat <- subset( ahs_cat , year == 2015 )
 # download the microdata to your local computer
 stopifnot( nrow( ahs_cat ) > 0 )
 
+options( survey.replicates.mse = TRUE )
+
 library(survey)
 
-ahs_df <- readRDS( file.path( getwd() , "2015 main.rds" ) )
+ahs_df <- readRDS( file.path( getwd() , "2015/national_v1.2/household.rds" ) )
 
 ahs_design <- 
-	svydesign( 
-		~ psu , 
-		strata = ~ stratum , 
-		data = ahs_df , 
-		weights = ~ weight , 
-		nest = TRUE 
+	svrepdesign(
+		weights = ~weight,
+		repweights = "repwgt[1-9]" ,
+		type = "Fay" ,
+		rho = ( 1 - 1 / sqrt( 4 ) ) ,
+		data = ahs_df
 	)
 ahs_design <- 
 	update( 
