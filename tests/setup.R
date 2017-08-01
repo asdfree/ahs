@@ -6,8 +6,8 @@ ahs_cat <-
 	get_catalog( "ahs" ,
 		output_dir = file.path( getwd() ) )
 
-# sample 75% of the records
-which_records <- sample( seq( nrow( ahs_cat ) ) , round( nrow( ahs_cat ) * 0.75 ) )
+# sample 50% of the records
+which_records <- sample( seq( nrow( ahs_cat ) ) , round( nrow( ahs_cat ) * 0.5 ) )
 
 # always sample year == 2015
 ahs_cat <- unique( rbind( ahs_cat[ which_records , ] , subset( ahs_cat , year == 2015 ) ) )
