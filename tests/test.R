@@ -18,7 +18,7 @@ library(survey)
 ahs_df <- 
 	readRDS( 
 		file.path( getwd() , 
-			"2015/national_v1.2/household.rds" 
+			"2015/national_v1.3/household.rds" 
 		) 
 	)
 
