@@ -1,7 +1,5 @@
 if ( .Platform$OS.type == 'windows' ) memory.limit( 256000 )
 
-library(lodown)
-lodown( "ahs" , output_dir = file.path( getwd() ) )
 this_sample_break <- Sys.getenv( "this_sample_break" )
 ahs_cat <- get_catalog( "ahs" , output_dir = file.path( getwd() ) )
 record_categories <- ceiling( seq( nrow( ahs_cat ) ) / ceiling( nrow( ahs_cat ) / 5 ) )
@@ -17,7 +15,7 @@ ahs_cat <-
 # 2015 only
 ahs_cat <- subset( ahs_cat , year == 2015 )
 # download the microdata to your local computer
-lodown( "ahs" , ahs_cat )
+
 
 options( survey.replicates.mse = TRUE )
 
