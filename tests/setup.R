@@ -7,17 +7,17 @@ this_sample_break <- Sys.getenv( "this_sample_break" )
 ahs_cat <- get_catalog( "ahs" , output_dir = file.path( getwd() ) )
 record_categories <- ceiling( seq( nrow( ahs_cat ) ) / ceiling( nrow( ahs_cat ) / 5 ) )
 ahs_cat <- ahs_cat[ record_categories == this_sample_break , ]
-lodown( "ahs" , ahs_cat )
+ahs_cat <- lodown( "ahs" , ahs_cat )
 if( any( ahs_cat$year == 2015 ) ){
-library(lodown)
-# examine all available AHS microdata files
-ahs_cat <-
-	get_catalog( "ahs" ,
-		output_dir = file.path( getwd() ) )
 
-# 2015 only
-ahs_cat <- subset( ahs_cat , year == 2015 )
-# download the microdata to your local computer
+
+
+
+
+
+
+
+
 
 
 options( survey.replicates.mse = TRUE )
