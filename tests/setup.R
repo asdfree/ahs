@@ -5,7 +5,7 @@ options("lodown.cachaca.savecache"=FALSE)
 library(lodown)
 this_sample_break <- Sys.getenv( "this_sample_break" )
 ahs_cat <- get_catalog( "ahs" , output_dir = file.path( getwd() ) )
-record_categories <- ceiling( seq( nrow( ahs_cat ) ) / ceiling( nrow( ahs_cat ) / 5 ) )
+record_categories <- ceiling( seq( nrow( ahs_cat ) ) / ceiling( nrow( ahs_cat ) / 6 ) )
 ahs_cat <- ahs_cat[ record_categories == this_sample_break , ]
 ahs_cat <- lodown( "ahs" , ahs_cat )
 if( any( ahs_cat$year == 2015 ) ){
