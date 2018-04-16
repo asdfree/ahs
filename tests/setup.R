@@ -20,8 +20,6 @@ if( any( ahs_cat$year == 2015 ) ){
 
 
 
-options( survey.replicates.mse = TRUE )
-
 library(survey)
 
 ahs_df <- 
@@ -37,6 +35,7 @@ ahs_design <-
 		repweights = "repwgt[1-9]" ,
 		type = "Fay" ,
 		rho = ( 1 - 1 / sqrt( 4 ) ) ,
+		mse = TRUE ,
 		data = ahs_df
 	)
 ahs_design <- 
