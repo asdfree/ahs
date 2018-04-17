@@ -4,7 +4,7 @@ Title: ahs
 Version: 0.1.0
 Author: Anthony Joseph Damico
 Maintainer: Anthony Joseph Damico <ajdamico@gmail.com>
-Description: A continuous integration package, tested on ajdamico/asdfree commit d52d580f696f908210555b51f17532db1e9455bd ajdamico/lodown commit 426603bd5292da994c625f7fbad71defb9cab9e8
+Description: A continuous integration package, tested on ajdamico/asdfree commit 7f654591cdb4bcc105e59433ac12d1a6b4534cf5 ajdamico/lodown commit 426603bd5292da994c625f7fbad71defb9cab9e8
 License: GPL-3
 Imports: survey, lodown, srvyr
 Encoding: UTF-8
