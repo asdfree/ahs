@@ -31,7 +31,7 @@ ahs_df <-
 
 ahs_design <- 
 	svrepdesign(
-		weights = ~wgt90geo,
+		weights = ~ wgt90geo ,
 		repweights = "repwgt[1-9]" ,
 		type = "Fay" ,
 		rho = ( 1 - 1 / sqrt( 4 ) ) ,
@@ -75,19 +75,19 @@ svyby( ~ one , ~ tenure , ahs_design , unwtd.count )
 svytotal( ~ one , ahs_design )
 
 svyby( ~ one , ~ tenure , ahs_design , svytotal )
-svymean( ~ rooms , ahs_design )
+svymean( ~ rooms , ahs_design , na.rm = TRUE )
 
-svyby( ~ rooms , ~ tenure , ahs_design , svymean )
+svyby( ~ rooms , ~ tenure , ahs_design , svymean , na.rm = TRUE )
 svymean( ~ lotsize , ahs_design , na.rm = TRUE )
 
 svyby( ~ lotsize , ~ tenure , ahs_design , svymean , na.rm = TRUE )
-svytotal( ~ rooms , ahs_design )
+svytotal( ~ rooms , ahs_design , na.rm = TRUE )
 
-svyby( ~ rooms , ~ tenure , ahs_design , svytotal )
+svyby( ~ rooms , ~ tenure , ahs_design , svytotal , na.rm = TRUE )
 svytotal( ~ lotsize , ahs_design , na.rm = TRUE )
 
 svyby( ~ lotsize , ~ tenure , ahs_design , svytotal , na.rm = TRUE )
-svyquantile( ~ rooms , ahs_design , 0.5 )
+svyquantile( ~ rooms , ahs_design , 0.5 , na.rm = TRUE )
 
 svyby( 
 	~ rooms , 
@@ -96,7 +96,8 @@ svyby(
 	svyquantile , 
 	0.5 ,
 	ci = TRUE ,
-	keep.var = TRUE 
+	keep.var = TRUE ,
+	na.rm = TRUE
 )
 svyratio( 
 	numerator = ~ rooms , 
@@ -105,8 +106,8 @@ svyratio(
 	na.rm = TRUE
 )
 sub_ahs_design <- subset( ahs_design , garage == 1 )
-svymean( ~ rooms , sub_ahs_design )
-this_result <- svymean( ~ rooms , ahs_design )
+svymean( ~ rooms , sub_ahs_design , na.rm = TRUE )
+this_result <- svymean( ~ rooms , ahs_design , na.rm = TRUE )
 
 coef( this_result )
 SE( this_result )
@@ -118,7 +119,8 @@ grouped_result <-
 		~ rooms , 
 		~ tenure , 
 		ahs_design , 
-		svymean 
+		svymean ,
+		na.rm = TRUE 
 	)
 	
 coef( grouped_result )
@@ -126,12 +128,12 @@ SE( grouped_result )
 confint( grouped_result )
 cv( grouped_result )
 degf( ahs_design )
-svyvar( ~ rooms , ahs_design )
+svyvar( ~ rooms , ahs_design , na.rm = TRUE )
 # SRS without replacement
-svymean( ~ rooms , ahs_design , deff = TRUE )
+svymean( ~ rooms , ahs_design , na.rm = TRUE , deff = TRUE )
 
 # SRS with replacement
-svymean( ~ rooms , ahs_design , deff = "replace" )
+svymean( ~ rooms , ahs_design , na.rm = TRUE , deff = "replace" )
 svyciprop( ~ below_poverty , ahs_design ,
 	method = "likelihood" , na.rm = TRUE )
 svyttest( rooms ~ below_poverty , ahs_design )
@@ -149,11 +151,11 @@ summary( glm_result )
 library(srvyr)
 ahs_srvyr_design <- as_survey( ahs_design )
 ahs_srvyr_design %>%
-	summarize( mean = survey_mean( rooms ) )
+	summarize( mean = survey_mean( rooms , na.rm = TRUE ) )
 
 ahs_srvyr_design %>%
 	group_by( tenure ) %>%
-	summarize( mean = survey_mean( rooms ) )
+	summarize( mean = survey_mean( rooms , na.rm = TRUE ) )
 means <- c( 1241.8890 , 972.6051 , 170.0121 )
 std_err <- c( 7.3613 , 5.6956 , 6.1586 )
 ci_lb <- c( 1227.3511 , 961.3569 , 157.8495 )
