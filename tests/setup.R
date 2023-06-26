@@ -18,6 +18,8 @@ ahs_tbl <- read_sas( tf )
 
 ahs_df <- data.frame( ahs_tbl )
 
+rm( ahs_tbl ) ; gc()
+
 names( ahs_df ) <- tolower( names( ahs_df ) )
 # ahs_fn <- file.path( path.expand( "~" ) , "AHS" , "this_file.rds" )
 # saveRDS( ahs_df , file = ahs_fn , compress = FALSE )
