@@ -1,6 +1,6 @@
-#
-#
-#
+# real estate supply
+# half bath addition, raised roof
+# vent, rent too damn high
 library(haven)
 library(httr)
 
