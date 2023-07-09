@@ -50,7 +50,6 @@ ahs_design <-
 					'Not occupied' )
 			) ,
 			
-			
 		lotsize =
 			factor( 
 				lotsize , 
@@ -59,7 +58,6 @@ ahs_design <-
 				"1/8 up to 1/4 acre" , "1/4 up to 1/2 acre" ,
 				"1/2 up to 1 acre" , "1 up to 5 acres" , 
 				"5 up to 10 acres" , "10 acres or more" ) ) ,
-				
 				
 		below_poverty = as.numeric( perpovlvl < 100 )
 				
