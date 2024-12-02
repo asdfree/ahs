@@ -9,7 +9,7 @@ tf <- tempfile()
 this_url <-
 	paste0(
 		"https://www2.census.gov/programs-surveys/ahs/" ,
-		"2021/AHS%202021%20National%20PUF%20v1.0%20Flat%20SAS.zip"
+		"2023/AHS%202023%20National%20PUF%20v1.0%20Flat%20SAS.zip"
 	)
 
 GET( this_url , write_disk( tf ) , progress() )
@@ -141,11 +141,11 @@ glm_result <-
 summary( glm_result )
 result <- svytotal( ~ as.numeric( intstatus == 1 ) , ahs_design )
 
-stopifnot( round( coef( result ) / 1000 , 0 ) == 128504 )
+stopifnot( round( coef( result ) / 1000 , 0 ) == 133231 )
 
 ci_results <- confint( result , level = 0.9 )
 
-stopifnot( round( ( ci_results[ 2 ] - coef( result ) ) / 1000 , 0 ) == 388 )
+stopifnot( round( ( ci_results[ 2 ] - coef( result ) ) / 1000 , 0 ) == 381 )
 library(srvyr)
 ahs_srvyr_design <- as_survey( ahs_design )
 ahs_srvyr_design %>%
