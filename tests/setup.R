@@ -60,7 +60,7 @@ ahs_design <-
 				"5 up to 10 acres" , "10 acres or more" ) ) ,
 				
 		below_poverty = as.numeric( perpovlvl < 100 )
-				
+
 	)
 sum( weights( ahs_design , "sampling" ) != 0 )
 
